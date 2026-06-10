@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Monitor - Dispatcher AO</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal">
+        <header>
+            <h1>ACTIVE_TASK_MONITOR // PRIORITY_QUEUE_SCHEDULER</h1>
+            <div class="status-bar">
+                <span>QUEUED: 3</span>
+                <span>ACTIVE: 2</span>
+                <span>COMPLETED_TODAY: 12</span>
+            </div>
+        </header>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="task-monitor.html" class="active">Tasks</a>
+            <a href="validation-audit.html">Audit Log</a>
+            <a href="dashboard.html" data-view="settings">Settings</a>
+        </nav>
+
+        <main>
+            <div class="card">
+                <div class="card-header">Queue Management</div>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="filter-status">Filter by Status:</label>
+                            <select id="filter-status">
+                                <option value="">All</option>
+                                <option value="queued">Queued</option>
+                                <option value="active">Active</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filter-entity">Entity:</label>
+                            <input type="text" id="filter-entity" placeholder="Search entity...">
+                        </div>
+                        <div class="form-group">
+                            <label for="sort-by">Sort By:</label>
+                            <select id="sort-by">
+                                <option value="priority">Priority (Descending)</option>
+                                <option value="created">Created Time</option>
+                                <option value="progress">Progress</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn" style="margin-top: 1rem;">Apply Filters</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Queue Status Summary</div>
+                <div class="card-content">
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;">
+                        <div style="padding: 1rem; background: rgba(0, 255, 136, 0.1); border-radius: 3px; text-align: center;">
+                            <div style="color: var(--color-secondary); font-size: 11px; text-transform: uppercase;">Total Tasks</div>
+                            <div style="color: var(--color-primary); font-size: 24px; font-weight: bold; margin-top: 0.5rem;">23</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(0, 204, 255, 0.1); border-radius: 3px; text-align: center;">
+                            <div style="color: var(--color-secondary); font-size: 11px; text-transform: uppercase;">Queued</div>
+                            <div style="color: var(--color-secondary); font-size: 24px; font-weight: bold; margin-top: 0.5rem;">3</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(0, 255, 136, 0.1); border-radius: 3px; text-align: center;">
+                            <div style="color: var(--color-secondary); font-size: 11px; text-transform: uppercase;">Active</div>
+                            <div style="color: var(--color-primary); font-size: 24px; font-weight: bold; margin-top: 0.5rem;">2</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(255, 170, 0, 0.1); border-radius: 3px; text-align: center;">
+                            <div style="color: var(--color-secondary); font-size: 11px; text-transform: uppercase;">In Progress</div>
+                            <div style="color: var(--color-warning); font-size: 24px; font-weight: bold; margin-top: 0.5rem;">18</div>
+                        </div>
+                        <div style="padding: 1rem; background: rgba(0, 255, 136, 0.1); border-radius: 3px; text-align: center;">
+                            <div style="color: var(--color-secondary); font-size: 11px; text-transform: uppercase;">Completed</div>
+                            <div style="color: var(--color-primary); font-size: 24px; font-weight: bold; margin-top: 0.5rem;">12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="color: var(--color-secondary); margin-top: 2rem; margin-bottom: 1rem; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">ACTIVE TASKS (2)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task ID</th>
+                        <th>Entity</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>ETA</th>
+                        <th>Throughput</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>QmX7a3...</code></td>
+                        <td>akhilesh-decisionassure-node</td>
+                        <td><span class="status-badge status-pass">PROCESSING</span></td>
+                        <td>
+                            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--color-primary); border-radius: 3px; height: 20px; position: relative; overflow: hidden;">
+                                <div style="background: var(--color-primary); height: 100%; width: 68%;"></div>
+                            </div>
+                            <small style="color: var(--color-secondary);">68%</small>
+                        </td>
+                        <td>~2m 15s</td>
+                        <td><span style="color: var(--color-primary); font-weight: bold;">4.2 MB/s</span></td>
+                        <td><button class="btn" style="padding: 0.4rem 0.8rem; font-size: 11px;">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td><code>QmZ2c5...</code></td>
+                        <td>supreme-computation-infra</td>
+                        <td><span class="status-badge status-pass">PROCESSING</span></td>
+                        <td>
+                            <div style="background: rgba(0, 0, 0, 0.3); border: 1px solid var(--color-primary); border-radius: 3px; height: 20px; position: relative; overflow: hidden;">
+                                <div style="background: var(--color-primary); height: 100%; width: 34%;"></div>
+                            </div>
+                            <small style="color: var(--color-secondary);">34%</small>
+                        </td>
+                        <td>~5m 42s</td>
+                        <td><span style="color: var(--color-primary); font-weight: bold;">3.1 MB/s</span></td>
+                        <td><button class="btn" style="padding: 0.4rem 0.8rem; font-size: 11px;">Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="color: var(--color-secondary); margin-top: 2rem; margin-bottom: 1rem; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">QUEUED TASKS (3)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Task ID</th>
+                        <th>Entity</th>
+                        <th>Priority</th>
+                        <th>Size</th>
+                        <th>Queued At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: var(--color-primary); font-weight: bold;">1</td>
+                        <td><code>QmY9b4...</code></td>
+                        <td>eric-scqos-gateway</td>
+                        <td><span style="color: var(--color-warning); font-weight: bold;">HIGH</span></td>
+                        <td>256 MB</td>
+                        <td>13:40:15</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 11px;">Promote</button></td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-secondary);">2</td>
+                        <td><code>QmA1d2...</code></td>
+                        <td>partner-logistics-hub</td>
+                        <td><span style="color: var(--color-primary);">NORMAL</span></td>
+                        <td>128 MB</td>
+                        <td>13:35:47</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 11px;">Promote</button></td>
+                    </tr>
+                    <tr>
+                        <td style="color: var(--color-secondary);">3</td>
+                        <td><code>QmB2e3...</code></td>
+                        <td>data-sync-service</td>
+                        <td><span style="color: var(--color-secondary);">LOW</span></td>
+                        <td>512 MB</td>
+                        <td>13:30:22</td>
+                        <td><button class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 11px;">Promote</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+
+        <footer>
+            <p>>_ PRIORITY_QUEUE_OPERATIONAL // NON_STACK_BASED_SCHEDULING_ACTIVE</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
