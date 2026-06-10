@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal">
+        <header>
+            <h1>VALIDATION_AUDIT_LOG</h1>
+            <div class="status-bar"><span>EVENTS: 847</span></div>
+        </header>
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="task-monitor.html">Tasks</a>
+            <a href="validation-audit.html" class="active">Audit</a>
+        </nav>
+        <main>
+            <table>
+                <thead><tr><th>Timestamp</th><th>Entity</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>2026-06-10 13:45:22</td><td>akhilesh-node</td><td><span class="status-badge status-pass">OK</span></td><td><button class="btn">Details</button></td></tr>
+                </tbody>
+            </table>
+        </main>
+        <footer><p>>_ FORENSIC_LEDGER_ACTIVE</p></footer>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
