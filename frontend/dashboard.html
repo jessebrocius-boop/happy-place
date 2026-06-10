@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispatcher AO Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="terminal">
+        <header>
+            <h1>DISPATCHER AO // SYSTEM_DASHBOARD</h1>
+            <div class="status-bar">
+                <span>🟢 SYSTEM_ACTIVE</span>
+                <span>INVARIANTS: 8/8</span>
+                <span id="current-time">--:--:--</span>
+            </div>
+        </header>
+
+        <nav>
+            <a href="#" data-view="dashboard" class="active">Dashboard</a>
+            <a href="#" data-view="tasks">Tasks</a>
+            <a href="#" data-view="audit">Audit Log</a>
+            <a href="#" data-view="settings">Settings</a>
+        </nav>
+
+        <main>
+            <div class="spinner"></div> Loading system status...
+        </main>
+
+        <footer>
+            <p>>_ DISPATCHER_OPERATIONAL // NASCENT_LABS & SUPREME_COMPUTATION JOINT_NODE</p>
+        </footer>
+    </div>
+
+    <script>
+        // Update clock
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }, 1000);
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
