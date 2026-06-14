@@ -3,36 +3,495 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forensic Ledger UI</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dispatcher AO: Autonomous Operations Cloud Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Aldrich&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #00F2FE;
+            --secondary-green: #A8FF78;
+            --dark-bg: #0D1117;
+            --terminal-bg: #111827;
+            --glow-blue: rgba(0, 242, 254, 0.4);
+            --glow-green: rgba(168, 255, 120, 0.4);
+            --text-light: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        #bubbleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        .hero-heading {
+            font-family: 'Aldrich', sans-serif;
+            color: var(--primary-blue);
+            text-shadow: 0 0 15px var(--glow-blue);
+            background-image: linear-gradient(90deg, var(--primary-blue) 0%, #4FACFE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 15px var(--glow-blue)); }
+            50% { filter: drop-shadow(0 0 25px var(--glow-blue)); }
+        }
+
+        .section-title {
+            font-family: 'Aldrich', sans-serif;
+            color: var(--secondary-green);
+            text-shadow: 0 0 8px var(--glow-green);
+            border-bottom: 1px solid rgba(168, 255, 120, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, var(--terminal-bg) 0%, rgba(17, 24, 39, 0.8) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 30px var(--glow-blue);
+            transform: translateY(-8px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .benefit-item {
+            border-left: 3px solid var(--secondary-green);
+            padding-left: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .benefit-item::before {
+            content: '▸';
+            position: absolute;
+            left: -12px;
+            color: var(--secondary-green);
+            font-weight: bold;
+        }
+
+        .benefit-item:hover {
+            border-left-color: var(--primary-blue);
+            padding-left: 20px;
+            color: #fff;
+        }
+
+        .trust-box {
+            background: linear-gradient(135deg, #1a202c 0%, #0f1419 100%);
+            border: 2px solid var(--secondary-green);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 0 30px var(--glow-green);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trust-box::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(168, 255, 120, 0.1) 0%, transparent 70%);
+            animation: rotate-gradient 10s linear infinite;
+        }
+
+        @keyframes rotate-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hash-display {
+            font-family: 'Aldrich', monospace;
+            font-size: 0.9rem;
+            color: var(--secondary-green);
+            overflow-wrap: break-word;
+            word-break: break-all;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: var(--secondary-green);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+            margin-right: 8px;
+            box-shadow: 0 0 10px var(--secondary-green);
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.3; }
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, #4FACFE 100%);
+            color: var(--dark-bg);
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px var(--glow-blue);
+            border: none;
+            cursor: pointer;
+            font-family: 'Aldrich', sans-serif;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px var(--glow-blue);
+        }
+
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(var(--primary-blue) 1px, transparent 1px),
+                linear-gradient(90deg, var(--primary-blue) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--terminal-bg);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-family: 'Aldrich', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary-blue);
+            text-shadow: 0 0 10px var(--glow-blue);
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-heading {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="terminal">
-        <header>
-            <h1>OPERATIONAL-LEDGER // ACTIVE_STATUS</h1>
-            <div class="status-bar">
-                <span>[INVARIANTS: 8/8]</span>
-            </div>
+    <div class="grid-lines"></div>
+    <canvas id="bubbleCanvas"></canvas>
+
+    <div class="container">
+        <header class="text-center py-12 border-b border-gray-700">
+            <h1 class="hero-heading text-4xl md:text-6xl font-bold mb-2">Dispatcher AO Cloud Services</h1>
+            <p class="text-lg text-gray-400 mb-4">Bringing unparalleled scalability and efficiency to autonomous operations.</p>
+            <p class="text-sm text-gray-500 mb-6">Built on the AiOS Protocol by Nascent Labs</p>
+            <button class="cta-button">Request Demo</button>
         </header>
-        <main>
-            <table>
-                <thead>
-                    <tr>
-                        <th>TIMESTAMP</th>
-                        <th>CID_CHAIN_ID</th>
-                        <th>ENTITY_AUTH</th>
-                        <th>SCQOS_STAT</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Dynamic Content will be inserted here -->
-                </tbody>
-            </table>
-        </main>
-        <footer>
-            <p>>_ SYSTEM QUARANTINE CAUGHT 1 UNAUTHORIZED TRANSITION PACKET</p>
+
+        <section class="py-8">
+            <div class="trust-box">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-8">
+                    <div class="flex-shrink-0 text-center md:text-left relative z-10">
+                        <p class="font-bold text-lg mb-1">
+                            <span class="status-indicator"></span>
+                            <span style="color: var(--secondary-green);">FWMP Compliance Bridge Status: ACTIVE</span>
+                        </p>
+                        <p class="text-sm text-gray-400">Verifiable policy and financial certainty provided by the Fair World Market Protocol.</p>
+                    </div>
+                    <div class="w-full md:w-auto md:max-w-md text-center relative z-10">
+                        <p class="text-xs text-gray-500 uppercase mb-2">Current Governing Policy Hash (GPH)</p>
+                        <p class="hash-display">0x4B3A8C...FE0D7B2D29...C1F4A6A8</p>
+                        <p class="text-xs mt-2" style="color: var(--primary-blue);">Status: <strong>Locked and Verifying</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">Uptime Guarantee</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">10M+</div>
+                <div class="stat-label">Devices Managed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">50ms</div>
+                <div class="stat-label">Avg Response Time</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Global Support</div>
+            </div>
+        </section>
+
+        <section class="py-12">
+            <h2 class="text-2xl section-title">Autonomous Cloud Services Suite</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-center mt-8">
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">Device Management</h3>
+                    <p class="text-sm text-gray-400">Secure Identity, Configuration & Monitoring, and Firmware-over-the-air updates (FOTA).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📡</div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">Location & Auditing Services</h3>
+                    <p class="text-sm text-gray-400">Assisted and Predictive GNSS for real-time asset tracking and movement auditing.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">Security & Compliance (FHE Layer)</h3>
+                    <p class="text-sm text-gray-400">Secure Identity and Provisioning, ensuring all operational data adheres to Fully Homomorphic Encryption (FHE) standards.</p>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-gray-400 max-w-3xl mx-auto">
+                Dispatcher AO offers a complete solution that accelerates time-to-market and reduces the operational and regulatory risks associated with large-scale IoT deployments.
+            </p>
+        </section>
+
+        <section class="py-12">
+            <h2 class="text-3xl section-title text-center">Device Observability: The Predictive Core</h2>
+            <p class="text-center text-lg text-gray-300 max-w-4xl mx-auto mb-10">
+                Identify and resolve issues faster with real-time visibility into your deployed assets. Device Observability gives the Aurora Agent the insight needed to predict system failures (e.g., HVAC unit failure) and optimize performance without requiring physical access.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-10">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">Key Capabilities (Agent Inputs)</h3>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="benefit-item">Automatic capture of device logs, metrics, and coredumps, even when devices are offline.</li>
+                        <li class="benefit-item">Automatic alerts on device performance changes, directly informing the AiOS Predictive Threading Scheduler.</li>
+                        <li class="benefit-item">Fleet-level monitoring of performance with powerful analysis tools for identifying logistical trends.</li>
+                        <li class="benefit-item">AI analysis and comparison of performance across different hardware and service environments.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--primary-blue);">Strategic Benefits (Business Outcomes)</h3>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="benefit-item"><strong>Lower Operational Costs:</strong> Reduce the need for field visits and manual debugging by empowering remote issue resolution.</li>
+                        <li class="benefit-item"><strong>Accelerated Launches:</strong> Collect crucial observability data during pilots and field testing to uncover elusive bugs before market release.</li>
+                        <li class="benefit-item"><strong>Improved Customer Experience:</strong> Proactively resolve issues before they impact end users, strengthening the reputation for reliability.</li>
+                        <li class="benefit-item"><strong>Data-Driven Decisions:</strong> Use real-world data to prioritize engineering work, guiding the FWMP's roadmap investments.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 text-center">
+            <h2 class="text-3xl section-title">Ready to Transform Your Operations?</h2>
+            <p class="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+                Join industry leaders leveraging Dispatcher AO for next-generation autonomous operations. Schedule a consultation with our team today.
+            </p>
+            <button class="cta-button">Get Started Now</button>
+        </section>
+
+        <footer class="text-center py-6 border-t border-gray-700 mt-12">
+            <p class="text-sm text-gray-600">Copyright © 2025 Nascent Labs. All rights reserved. | Powered by the AiOS Protocol.</p>
         </footer>
     </div>
+
+<script>
+    const canvas = document.getElementById('bubbleCanvas');
+    const ctx = canvas.getContext('2d');
+    let bubbles = [];
+    const maxBubbles = 35;
+    
+    const primaryBlue = 'rgba(0, 242, 254, 0.6)';
+    const secondaryGreen = 'rgba(168, 255, 120, 0.6)';
+
+    function getRandomColor() {
+        return Math.random() > 0.5 ? primaryBlue : secondaryGreen;
+    }
+
+    function setCanvasSize() {
+        canvas.width = window.innerWidth;
+        canvas.height = Math.max(document.body.scrollHeight, window.innerHeight);
+    }
+
+    setCanvasSize();
+    window.addEventListener('resize', () => {
+        setCanvasSize();
+        if (bubbles.length === 0) {
+            initBubbles();
+        }
+    });
+
+    class Bubble {
+        constructor(x, y, radius, dx, dy, color) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+            this.dx = dx;
+            this.dy = dy;
+            this.color = color;
+            this.opacity = Math.random() * 0.3 + 0.3;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            
+            ctx.fillStyle = this.color.replace('0.6', String(this.opacity * 0.2));
+            ctx.fill();
+            
+            ctx.strokeStyle = this.color.replace('0.6', String(this.opacity));
+            ctx.shadowColor = this.color;
+            ctx.shadowBlur = this.radius * 0.8;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            ctx.shadowBlur = 0;
+            ctx.shadowColor = 'transparent';
+        }
+
+        update() {
+            if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                this.dx = -this.dx;
+            }
+
+            if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                this.dy = -this.dy;
+            }
+
+            this.x += this.dx;
+            this.y += this.dy;
+
+            this.draw();
+        }
+    }
+
+    function initBubbles() {
+        bubbles = [];
+        for (let i = 0; i < maxBubbles; i++) {
+            let radius = Math.random() * 5 + 3;
+            let x = Math.random() * (canvas.width - radius * 2) + radius;
+            let y = Math.random() * (canvas.height - radius * 2) + radius;
+            let dx = (Math.random() - 0.5) * 0.8;
+            let dy = (Math.random() - 0.5) * 0.8;
+            let color = getRandomColor();
+
+            bubbles.push(new Bubble(x, y, radius, dx, dy, color));
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        ctx.fillStyle = 'rgba(13, 17, 23, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        bubbles.forEach(bubble => {
+            bubble.update();
+        });
+    }
+
+    initBubbles();
+    animate();
+
+    // CTA Button interactivity
+    document.querySelectorAll('.cta-button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('Demo request feature coming soon! Contact: demos@nascentlabs.io');
+        });
+    });
+</script>
+
 </body>
-</html>
+</html>o
